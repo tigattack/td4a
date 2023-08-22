@@ -1,6 +1,7 @@
-ARG PYTHON_VERSION=3.8
+# renovate: datasource=docker depName=python versioning=docker
+ARG PYTHON_VERSION=3.8-slim-bookworm
 
-FROM python:${PYTHON_VERSION}-slim-bookworm
+FROM python:${PYTHON_VERSION}
 
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
