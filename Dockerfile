@@ -1,17 +1,14 @@
-FROM python:3.8.5-alpine3.12
+ARG PYTHON_VER='3.8'
 
-# Update the packages
-RUN apk update
+FROM python:${PYTHON_VER}-slim-bookworm
 
-# Install the ansible dependancies
-RUN apk add gcc libffi-dev musl-dev openssl-dev sshpass make
-# RUN apk add py-crypto python-dev
+ARG PYTHON_VER
+ENV PYTHONUNBUFFERED=1
 
-# Install td4a
-RUN pip install td4a==2.0.3
+WORKDIR /app
+COPY src/ src/
+COPY requirements.txt setup.py ./
 
-# Clear out extras
-RUN rm -rf /var/cache/apk/*
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Start td4a
-CMD [ "td4a-server" ]
+ENTRYPOINT [ "src/td4a-server" ]
