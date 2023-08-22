@@ -4,7 +4,7 @@ netaddr==0.8.0
 Twisted==22.10.0
 requests==2.31.0
 ruamel.yaml==0.16.10
-genson==1.2.1
+genson==1.2.2
 jsonschema==3.2.0
 jinja2==3.0
 werkzeug==2.0.3
