@@ -2,6 +2,7 @@ import re
 import sys
 import traceback
 
+
 class HandledException(Exception):
     def __init__(self, value):
         self.value = value
@@ -13,11 +14,13 @@ class HandledException(Exception):
     def json(self):
         return self.value['json']
 
-class ExceptionHandler(object):
+
+class ExceptionHandler(): # pylint: disable=too-many-instance-attributes
     """ Handle the expected errors."""
     def __init__(self, function):
         self.function = function
-        self.error = self.typ = self.tback = self.exc_type = self.exc_value = self.exc_traceback = None
+        self.error = self.typ = self.tback = \
+            self.exc_type = self.exc_value = self.exc_traceback = None
         self.error_map = {
             "requests.exceptions": self.requests_error,
             "ruamel.yaml.parser.ParserError": self.parser_error,
@@ -38,23 +41,24 @@ class ExceptionHandler(object):
 
             error_module = getattr(error, '__module__', None)
             if error_module:
-                full_error = "%s.%s" % (error.__module__, self.exc_type.__name__)
+                full_error = f"{error.__module__}.{self.exc_type.__name__}"
             else:
                 full_error = self.exc_type.__name__
             handler = self.error_map.get(full_error,
-                                         self.error_map.get(error_module,
-                                                            self.unhandled))
+                                            self.error_map.get(error_module,
+                                            self.unhandled))
             self.typ = kwargs.get('typ')
             message = handler()
-            raise HandledException({"json": message})
+            raise HandledException({"json": message}) from error
 
     def error_response(self, message, line_number):
+        type_nice = 'template' if self.typ == 'p2' else 'data'
         error_payload = {"handled_error": {
             "in": self.typ,
-            "title": "Message: Issue found loading %s." % self.typ,
+            "title": f"Issue rendering {type_nice}.",
             "line_number": line_number,
-            "details": "Details: %s" % message,
-            "raw_error": "%s\n%s" % (self.exc_type, self.exc_value)
+            "details": f"Details: {message}",
+            "raw_error": f"{self.exc_type}:\n{self.exc_value}"
             }
                         }
         return error_payload
@@ -62,16 +66,16 @@ class ExceptionHandler(object):
     def constructor_error(self):
         line_number = self.error.problem_mark.line+1
         message = next(x for x in str(self.error).splitlines()
-                       if x.startswith('found'))
+                        if x.startswith('found'))
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
 
     def duplicate_key_error(self):
         line_number = self.error.problem_mark.line+1
         message = next(x for x in str(self.error).splitlines()
-                       if x.startswith('found')).split('with')[0]
+                        if x.startswith('found')).split('with')[0]
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
 
     def jinja_error(self):
         message = str(self.error).replace("'ruamel.yaml.comments.CommentedMap object'", 'Object')
@@ -81,7 +85,7 @@ class ExceptionHandler(object):
         else:
             line_number = 'unknown'
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
 
     def parser_error(self):
         line_number = self.error.problem_mark.line + 1
@@ -91,18 +95,18 @@ class ExceptionHandler(object):
         else:
             message = str(self.error)
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
 
     def scanner_error(self):
         line_number = self.error.problem_mark.line + 1
         message = str(self.error).splitlines()[0]
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
 
     def requests_error(self):
         message = "DB connection problems, see the browser developer tools for the full error."
         return self.error_response(message=message,
-                                   line_number=None)
+                                    line_number=None)
 
     def type_error(self):
         message = str(self.error)
@@ -112,7 +116,7 @@ class ExceptionHandler(object):
         else:
             line_number = 'unknown'
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
 
     def unhandled(self):
         print(self.exc_type, self.exc_value, self.exc_traceback, self.tback, self.error)
@@ -121,6 +125,6 @@ class ExceptionHandler(object):
             line_number = line_numbers[0][1]
         else:
             line_number = None
-        message = "Please see the console for details. %s" % str(self.error)
+        message = f"Please see the console for details. {str(self.error)}"
         return self.error_response(message=message,
-                                   line_number=line_number)
+                                    line_number=line_number)
