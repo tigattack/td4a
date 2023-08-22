@@ -36,7 +36,7 @@ def config():
                     "lineWrapping" : True,
                     "mode": "jinja2"
                 },
-                "title": "RENDER",
+                "title": "TEMPLATE",
                 "b1": {
                     "icon": "create",
                     "show": True,
