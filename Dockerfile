@@ -1,3 +1,4 @@
+# renovate: datasource=github-tags depName=python/cpython
 ARG PYTHON_VERSION=3.8
 
 FROM python:${PYTHON_VERSION}-slim-bookworm
