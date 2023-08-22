@@ -67,7 +67,7 @@ class ExceptionHandler():  # pylint: disable=too-many-instance-attributes
         return error_payload
 
     def constructor_error(self):
-        line_number = self.error.problem_mark.line+1
+        line_number = self.error.problem_mark.line+1  # pylint: disable=no-member
         message = next(
             x for x in str(self.error).splitlines()
             if x.startswith('found'))
@@ -76,7 +76,7 @@ class ExceptionHandler():  # pylint: disable=too-many-instance-attributes
             line_number=line_number)
 
     def duplicate_key_error(self):
-        line_number = self.error.problem_mark.line+1
+        line_number = self.error.problem_mark.line+1  # pylint: disable=no-member
         message = next(
             x for x in str(self.error).splitlines()
             if x.startswith('found')).split('with')[0]
@@ -97,7 +97,7 @@ class ExceptionHandler():  # pylint: disable=too-many-instance-attributes
             line_number=line_number)
 
     def parser_error(self):
-        line_number = self.error.problem_mark.line + 1
+        line_number = self.error.problem_mark.line + 1  # pylint: disable=no-member
         messages = [
             x for x in str(self.error).splitlines() if x.startswith('expected')
         ]
@@ -110,7 +110,7 @@ class ExceptionHandler():  # pylint: disable=too-many-instance-attributes
             line_number=line_number)
 
     def scanner_error(self):
-        line_number = self.error.problem_mark.line + 1
+        line_number = self.error.problem_mark.line + 1  # pylint: disable=no-member
         message = str(self.error).splitlines()[0]
         return self.error_response(
             message=message,

@@ -21,7 +21,7 @@ def splitpart(_input_string, split_string=' ', index=0, alias='splitpart'):
     return to_text(value)
 
 
-class FilterModule(object):
+class FilterModule():  # pylint: disable=too-few-public-methods
     def filters(self):
         return {
             'splitpart': splitpart

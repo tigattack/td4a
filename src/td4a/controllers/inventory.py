@@ -1,9 +1,12 @@
 """ /inventory
 """
-from flask import request, jsonify, Blueprint
-from flask import current_app as app
-from td4a.models.td4ayaml import Td4aYaml
 import json
+
+from flask import Blueprint
+from flask import current_app as app
+from flask import jsonify, request
+
+from td4a.models.td4ayaml import Td4aYaml
 
 api_inventory = Blueprint('api_inventory', __name__)
 

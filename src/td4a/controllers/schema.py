@@ -1,10 +1,11 @@
 """ /retrieve
 """
-from flask import request, jsonify, Blueprint
+import genson
+from flask import Blueprint, jsonify, request
+
 from td4a.models.exception_handler import ExceptionHandler, HandledException
 from td4a.models.sort_commented_map import sort_commented_map
 from td4a.models.td4ayaml import Td4aYaml
-import genson
 
 api_schema = Blueprint('api_schema', __name__)
 

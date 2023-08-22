@@ -1,7 +1,9 @@
-from flask import request, jsonify, Blueprint
-from flask import current_app as app
-from td4a.models.exception_handler import ExceptionHandler, HandledException
 import requests
+from flask import Blueprint
+from flask import current_app as app
+from flask import jsonify, request
+
+from td4a.models.exception_handler import ExceptionHandler, HandledException
 
 api_link = Blueprint('api_link', __name__)
 
@@ -13,7 +15,7 @@ def link(payload, args, typ):
     _ = typ
     auth = (args.username, args.password)
     url = args.url
-    response = requests.post("%s" % url, json=payload, auth=auth)
+    response = requests.post(url, json=payload, auth=auth, timeout=5)
     return {"id": response.json()['id']}
 
 

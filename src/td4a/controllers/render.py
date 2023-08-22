@@ -1,11 +1,14 @@
 """ /render
 """
-from flask import request, jsonify, Blueprint
-from flask import current_app as app
-from jinja2 import meta, Environment, StrictUndefined, Undefined
-from td4a.models.exception_handler import ExceptionHandler, HandledException
-from ruamel.yaml import YAML
 import re
+
+from flask import Blueprint
+from flask import current_app as app
+from flask import jsonify, request
+from jinja2 import Environment, StrictUndefined, Undefined, meta
+from ruamel.yaml import YAML
+
+from td4a.models.exception_handler import ExceptionHandler, HandledException
 
 api_render = Blueprint('api_render', __name__)
 
@@ -21,7 +24,7 @@ def jinja_unresolved(template, typ):
     return unresolved
 
 
-def lookup(*args, **kwargs):
+def lookup(*args, **kwargs):  # pylint: disable=unused-argument
     return "unsupported"
 
 

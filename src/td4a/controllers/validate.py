@@ -1,11 +1,11 @@
 """ /retrieve
 """
-from flask import request, jsonify, Blueprint
-from td4a.models.exception_handler import ExceptionHandler, HandledException
-from td4a.models.td4ayaml import Td4aYaml
+from flask import Blueprint, jsonify, request
 from jsonschema import Draft4Validator, FormatChecker
 from jsonschema.exceptions import UnknownType
 
+from td4a.models.exception_handler import ExceptionHandler, HandledException
+from td4a.models.td4ayaml import Td4aYaml
 
 api_validate = Blueprint('api_validate', __name__)
 
@@ -27,8 +27,8 @@ def validation(payload):
         data = yaml_safe.load(payload['p1'])
         schema = yaml_safe.load(payload['p2'])
         errors = []
-        v = Draft4Validator(schema, format_checker=FormatChecker())
-        for error in sorted(v.iter_errors(data)):
+        validator = Draft4Validator(schema, format_checker=FormatChecker())
+        for error in sorted(validator.iter_errors(data)):
             errors.append(error.message)
         if errors:
             return {"p3": yaml.dump({"messages": errors})}
