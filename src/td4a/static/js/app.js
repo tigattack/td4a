@@ -91,11 +91,11 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
         } else if (error.in == "p1") {
           var myEditor = angular.element(document.getElementById('p1_editor'))
         }
-         var codeMirrorEditor = myEditor[0].childNodes[0].CodeMirror
-         $scope.error.codeMirrorEditor = codeMirrorEditor
-         $scope.error.line_number = actualLineNumber
-         $scope.error.codeMirrorEditor.addLineClass($scope.error.line_number, 'wrap', 'error');
-         codeMirrorEditor.scrollIntoView({line: actualLineNumber});
+        var codeMirrorEditor = myEditor[0].childNodes[0].CodeMirror
+        $scope.error.codeMirrorEditor = codeMirrorEditor
+        $scope.error.line_number = actualLineNumber
+        $scope.error.codeMirrorEditor.addLineClass($scope.error.line_number, 'wrap', 'error');
+        codeMirrorEditor.scrollIntoView({line: actualLineNumber});
     } else {
         var errorMessage = `${error.title} ${error.details}\n`;
     }
@@ -115,7 +115,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
           url     : '/link',
           data    : {"panels": {"p1": $scope.panels.p1, "p2": $scope.panels.p2}, "config": $scope.config},
           headers : { 'Content-Type': 'application/json' }
-         })
+        })
       .then(function(response) {
           if (response.status == 200) {
             if ("handled_error" in response.data) {
@@ -137,7 +137,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
           url     : $scope.config.p1.b1.url,
           data    : { "p1": $scope.panels.p1  },
           headers : { 'Content-Type': 'application/json' }
-         })
+        })
       .then(function(response) {
         if (response.status == 200) {
           if ("handled_error" in response.data) {
@@ -164,7 +164,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
           url     : $scope.config.p2.b1.url,
           data    : { "p1": $scope.panels.p1, "p2": $scope.panels.p2 },
           headers : { 'Content-Type': 'application/json' }
-         })
+        })
       .then(function(response) {
         if (response.status == 200) {
           if ("handled_error" in response.data) {
@@ -225,11 +225,4 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     $scope.panels = { p1: '', p2: '' }
     $scope.init()
   };
-
-
-
-
-
-
-
 }); //controller
