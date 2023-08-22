@@ -32,7 +32,6 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     },
     "Cmd-S": function(cm) {
       localStorageService.set('panels', $scope.panels)
-      localStorageService.set('config', $scope.config)
       showToast('Saved', 3000, 'md-primary')
     },
     "Cmd-R": function(cm) {
@@ -42,7 +41,6 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
       $scope.panels = { p1: '', p2: '', p3: '' };
       $timeout(function() {cm.refresh();});
     },
-
   }
 
   $scope.getter = function(rroute) {
@@ -217,9 +215,8 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     $scope.showDemo()
     $cookies.put('demoShown',true);
     $scope.init()
-  } else if ( localStorageService.get('panels') && localStorageService.get('config')) {
+  } else if ( localStorageService.get('panels')) {
     $scope.panels = localStorageService.get('panels')
-    $scope.config = localStorageService.get('config')
     $scope.init()
   } else {
     $scope.panels = { p1: '', p2: '' }
