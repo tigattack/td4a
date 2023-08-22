@@ -5,6 +5,7 @@ import requests
 
 api_link = Blueprint('api_link', __name__)
 
+
 @ExceptionHandler
 def link(payload, args, typ):
     """ store a doc in the db

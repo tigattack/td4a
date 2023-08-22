@@ -1,5 +1,6 @@
 from netaddr import IPNetwork
 
+
 def convert(network, netmask):
     entry = IPNetwork('%s/%s' % (network, netmask))
     answer = {}
@@ -12,6 +13,7 @@ def convert(network, netmask):
     answer['net_bits'] = '%s/%s' % (network, answer['bits'])
     answer['net_hostmask'] = '%s/%s' % (network, answer['hostmask'])
     return answer
+
 
 class FilterModule(object):
     def filters(self):

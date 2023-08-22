@@ -4,11 +4,11 @@ from flask import request, jsonify, Blueprint
 from flask import current_app as app
 from jinja2 import meta, Environment, StrictUndefined, Undefined
 from td4a.models.exception_handler import ExceptionHandler, HandledException
-from td4a.models.td4ayaml import Td4aYaml
 from ruamel.yaml import YAML
 import re
 
-api_render = Blueprint('api_render', __name__) # pylint: disable=invalid-name
+api_render = Blueprint('api_render', __name__)
+
 
 @ExceptionHandler
 def jinja_unresolved(template, typ):
@@ -20,8 +20,10 @@ def jinja_unresolved(template, typ):
     unresolved = meta.find_undeclared_variables(env.parse(template))
     return unresolved
 
+
 def lookup(*args, **kwargs):
     return "unsupported"
+
 
 @ExceptionHandler
 def jinja_render(data, template, filters, typ):
@@ -39,6 +41,7 @@ def jinja_render(data, template, filters, typ):
     result = env.from_string(template).render(data)
     return result
 
+
 @ExceptionHandler
 def yaml_parse(string, typ):
     """ load yaml from string
@@ -46,6 +49,7 @@ def yaml_parse(string, typ):
     _ = typ
     yaml = YAML()
     yaml.load(string)
+
 
 @ExceptionHandler
 def render(payload, filters, typ):
@@ -75,21 +79,24 @@ def render(payload, filters, typ):
             if jinja_unresolved(template=after_jinja, typ="p1"):
                 while after_jinja != raw_data:
                     raw_data = after_jinja
-                    after_jinja = jinja_render(data=tvars,
-                                                template=raw_data,
-                                                filters=filters,
-                                                typ="p1")
+                    after_jinja = jinja_render(
+                        data=tvars,
+                        template=raw_data,
+                        filters=filters,
+                        typ="p1")
                     yaml_ready = expose_dicts.sub("{\\1}", after_jinja)
                     yaml_ready = expose_lists1.sub("[\\1]", yaml_ready)
                     yaml_ready = dq_jinja.sub('"{{\\1}}"', yaml_ready)
                     tvars = loader.load(yaml_ready)
-            result = jinja_render(data=tvars,
-                                    template=payload['p2'],
-                                    filters=filters,
-                                    typ="p2")
+            result = jinja_render(
+                data=tvars,
+                template=payload['p2'],
+                filters=filters,
+                typ="p2")
         return {"p3": result}
     except HandledException as error:
         return error.json()
+
 
 @api_render.route('/render', methods=['POST'])
 def rest_render():
@@ -101,7 +108,10 @@ def rest_render():
             app.logger.debug('Input data:\n%s', request.json.get('p1'))
             app.logger.debug('Template data:\n%s', request.json.get('p2'))
 
-        response = render(payload=request.json, filters=app.filters, typ="page")
+        response = render(
+            payload=request.json,
+            filters=app.filters,
+            typ="page")
 
         if response.get('handled_error'):
             raise HandledException({'json': response})

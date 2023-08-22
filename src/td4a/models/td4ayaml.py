@@ -1,6 +1,7 @@
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
 
+
 class Td4aYaml(YAML):
     """ Build a string dumper for ruamel
     """

@@ -5,6 +5,7 @@ from flask import current_app as app
 
 api_config = Blueprint('api_config', __name__)  # pylint: disable=invalid-name
 
+
 @api_config.route('/config', methods=['GET'])
 def config():
     """ provide some config options to the UI
@@ -14,8 +15,8 @@ def config():
             "p1": {
                 "options": {
                     "lineNumbers": True,
-                    "theme":"material",
-                    "lineWrapping" : True,
+                    "theme": "material",
+                    "lineWrapping": True,
                     "mode": "yaml",
                     "indentUnit": 2,
                     "tabSize": 2
@@ -33,7 +34,7 @@ def config():
                 "options": {
                     "lineNumbers": True,
                     "theme": "material",
-                    "lineWrapping" : True,
+                    "lineWrapping": True,
                     "mode": "jinja2"
                 },
                 "title": "TEMPLATE",
@@ -48,7 +49,7 @@ def config():
                 "options": {
                     "lineNumbers": True,
                     "theme": "material",
-                    "lineWrapping" : True,
+                    "lineWrapping": True,
                     "mode": 'text'
                 },
                 "title": "RESULT",
@@ -64,8 +65,8 @@ def config():
             "p1": {
                 "options": {
                     "lineNumbers": True,
-                    "theme":"material",
-                    "lineWrapping" : True,
+                    "theme": "material",
+                    "lineWrapping": True,
                     "mode": "yaml",
                     "indentUnit": 2,
                     "tabSize": 2
@@ -83,7 +84,7 @@ def config():
                 "options": {
                     "lineNumbers": True,
                     "theme": "material",
-                    "lineWrapping" : True,
+                    "lineWrapping": True,
                     "mode": "yaml"
                 },
                 "title": "SCHEMA",
@@ -98,7 +99,7 @@ def config():
                 "options": {
                     "lineNumbers": True,
                     "theme": "material",
-                    "lineWrapping" : True,
+                    "lineWrapping": True,
                     "mode": "yaml"
                 },
                 "title": "VALIDATION SUCCESS/ERRORS",

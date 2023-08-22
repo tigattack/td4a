@@ -1,5 +1,6 @@
 from ruamel.yaml.comments import CommentedMap
 
+
 def sort_commented_map(commented_map):
     """ Sort a ruamel commented map
 

@@ -5,6 +5,7 @@ import sys
 import importlib
 import ansible.plugins.filter as apf
 
+
 def load_dir(directory):
     """ Load jinja filters in ansible format
     """
@@ -12,10 +13,12 @@ def load_dir(directory):
     sys.path.append(directory)
     for entry in os.listdir(directory):
         if entry != '__init__.py' and entry.split('.')[-1] == 'py':
-            filters = importlib.import_module(entry[:-3]).FilterModule().filters()
+            filters = importlib.import_module(
+                entry[:-3]).FilterModule().filters()
             for key, value in filters.items():
                 filter_list.append((key, value))
     return filter_list
+
 
 def filters_load(custom_filters):
     """ load the filters

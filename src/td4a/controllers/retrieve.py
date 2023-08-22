@@ -5,7 +5,8 @@ from flask import current_app as app
 from td4a.models.exception_handler import ExceptionHandler, HandledException
 import requests
 
-api_retrieve = Blueprint('api_retrieve', __name__) # pylint: disable=invalid-name
+api_retrieve = Blueprint('api_retrieve', __name__)
+
 
 @ExceptionHandler
 def retrieve(doc_id, typ):
@@ -25,9 +26,9 @@ def retrieve(doc_id, typ):
             "line_number": None,
             "details": "Details: %s" % doc['error'],
             "raw_error": "%s" % cdoc.text
-            }
-                   }
+            }}
     return response
+
 
 @api_retrieve.route('/retrieve', methods=['GET'])
 def rest_retrieve():

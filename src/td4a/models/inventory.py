@@ -4,6 +4,7 @@ from ansible.inventory.manager import InventoryManager
 from ansible.module_utils._text import to_bytes
 from ansible.parsing.vault import VaultSecret
 
+
 class TextVaultSecret(VaultSecret):
     '''A secret piece of text. ie, a password. Tracks text encoding.
     The text encoding of the text may not be the default text encoding so
@@ -18,8 +19,11 @@ class TextVaultSecret(VaultSecret):
 
     @property
     def bytes(self):
-        '''The text encoded with encoding, unless we specifically set _bytes.'''
-        return self._bytes or to_bytes(self.text, encoding=self.encoding, errors=self.errors)
+        '''The text encoded with encoding, unless we specifically set _bytes.
+        '''
+        return self._bytes or to_bytes(
+            self.text, encoding=self.encoding, errors=self.errors)
+
 
 def inventory_load(inventory_sources, vault_secret):
     """ Load the inventory
@@ -32,10 +36,12 @@ def inventory_load(inventory_sources, vault_secret):
     for hostname in inventory.hosts:
         host = inventory.get_host(hostname)
         variable_manager = VariableManager(loader=loader, inventory=inventory)
-        magic_vars = ['ansible_playbook_python', 'groups', 'group_names', 'inventory_dir',
-                      'inventory_file', 'inventory_hostname', 'inventory_hostname_short',
-                      'omit', 'playbook_dir']
+        magic_vars = [
+            'ansible_playbook_python', 'groups', 'group_names',
+            'inventory_dir', 'inventory_file', 'inventory_hostname',
+            'inventory_hostname_short', 'omit', 'playbook_dir']
         all_vars = variable_manager.get_vars(host=host, include_hostvars=True)
-        cleaned = ({k: v for (k, v) in all_vars.items() if k not in magic_vars})
+        cleaned = (
+            {k: v for (k, v) in all_vars.items() if k not in magic_vars})
         result[hostname] = cleaned
     return result
