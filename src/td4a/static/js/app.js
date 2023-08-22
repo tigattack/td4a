@@ -14,6 +14,17 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
   $scope.config = {}
   $scope.demoShown = $cookies.get('demoShown') || false;
 
+  function showToast(message, hideDelay, highlightClass) {
+    var toast = $mdToast.simple()
+      .textContent(message)
+      .action('close')
+      .highlightAction(true)
+      .highlightClass(highlightClass)
+      .position('top right')
+      .hideDelay(hideDelay);
+    $mdToast.show(toast)
+  }
+  
   $scope.extraKeys = {
     Tab: function(cm) {
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
@@ -21,24 +32,15 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     },
     "Cmd-S": function(cm) {
       localStorageService.set('panels', $scope.panels)
-      localStorageService.set('config', $scope.config)
-      var toast = $mdToast.simple()
-        .textContent("Saved")
-        .action('close')
-        .highlightAction(true)
-        .highlightClass('md-primary')
-        .position('top right')
-        .hideDelay('2000');
-      $mdToast.show(toast)
+      showToast('Saved', 3000, 'md-primary')
     },
-    "Cmd-R": function(cm) {
+    "Cmd-E": function(cm) {
       $scope.p2_b1_click()
     },
     "Cmd-B": function(cm) {
       $scope.panels = { p1: '', p2: '', p3: '' };
       $timeout(function() {cm.refresh();});
     },
-
   }
 
   $scope.getter = function(rroute) {
@@ -91,22 +93,15 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
         } else if (error.in == "p1") {
           var myEditor = angular.element(document.getElementById('p1_editor'))
         }
-         var codeMirrorEditor = myEditor[0].childNodes[0].CodeMirror
-         $scope.error.codeMirrorEditor = codeMirrorEditor
-         $scope.error.line_number = actualLineNumber
-         $scope.error.codeMirrorEditor.addLineClass($scope.error.line_number, 'wrap', 'error');
-         codeMirrorEditor.scrollIntoView({line: actualLineNumber});
+        var codeMirrorEditor = myEditor[0].childNodes[0].CodeMirror
+        $scope.error.codeMirrorEditor = codeMirrorEditor
+        $scope.error.line_number = actualLineNumber
+        $scope.error.codeMirrorEditor.addLineClass($scope.error.line_number, 'wrap', 'error');
+        codeMirrorEditor.scrollIntoView({line: actualLineNumber});
     } else {
         var errorMessage = `${error.title} ${error.details}\n`;
     }
-    var toast = $mdToast.simple()
-      .textContent(errorMessage)
-      .action('close')
-      .highlightAction(true)
-      .highlightClass('md-warn')
-      .position('top right')
-      .hideDelay('60000');
-    $mdToast.show(toast)
+    showToast(errorMessage, 3000, 'md-warn')
   };
 
   $scope.link = function() {
@@ -115,7 +110,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
           url     : '/link',
           data    : {"panels": {"p1": $scope.panels.p1, "p2": $scope.panels.p2}, "config": $scope.config},
           headers : { 'Content-Type': 'application/json' }
-         })
+        })
       .then(function(response) {
           if (response.status == 200) {
             if ("handled_error" in response.data) {
@@ -137,7 +132,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
           url     : $scope.config.p1.b1.url,
           data    : { "p1": $scope.panels.p1  },
           headers : { 'Content-Type': 'application/json' }
-         })
+        })
       .then(function(response) {
         if (response.status == 200) {
           if ("handled_error" in response.data) {
@@ -164,7 +159,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
           url     : $scope.config.p2.b1.url,
           data    : { "p1": $scope.panels.p1, "p2": $scope.panels.p2 },
           headers : { 'Content-Type': 'application/json' }
-         })
+        })
       .then(function(response) {
         if (response.status == 200) {
           if ("handled_error" in response.data) {
@@ -176,7 +171,10 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
         }
       })
       .catch(function(error) {
+        let err = 'Something unexpected happened. Is backend unavailable?'
+        console.log(err)
         console.log(error.data)
+        showToast(err, 6000, 'md-warn')
         $scope.config.p2.b1.show = true;
       }) //catch
     } //render
@@ -217,19 +215,11 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     $scope.showDemo()
     $cookies.put('demoShown',true);
     $scope.init()
-  } else if ( localStorageService.get('panels') && localStorageService.get('config')) {
+  } else if ( localStorageService.get('panels')) {
     $scope.panels = localStorageService.get('panels')
-    $scope.config = localStorageService.get('config')
     $scope.init()
   } else {
     $scope.panels = { p1: '', p2: '' }
     $scope.init()
   };
-
-
-
-
-
-
-
 }); //controller

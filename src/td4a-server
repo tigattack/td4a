@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import logging
 import os
 from argparse import ArgumentParser, RawTextHelpFormatter
 
@@ -16,46 +17,75 @@ def parse_args():
     """
     parser = ArgumentParser(description='',
                             formatter_class=RawTextHelpFormatter)
-    parser.add_argument('-f', action="store", dest="custom_filters",
+    parser.add_argument('-f',
+                        action="store",
+                        dest="custom_filters",
                         required=False,
+                        default=os.environ.get('TD4A_CUSTOM_FILTERS'),
                         help="A folder containing custom filters.")
-    parser.add_argument('-i', action="append", dest="inventory_source",
+    parser.add_argument('-i',
+                        action="append",
+                        dest="inventory_source",
                         required=False,
+                        default=os.environ.get('TD4A_INVENTORY_SOURCE'),
                         help="A folder containing the inventory.")
-    parser.add_argument('-v', action="store", dest="vault_secret",
+    parser.add_argument('-v',
+                        action="store",
+                        dest="vault_secret",
                         required=False,
+                        default=os.environ.get('TD4A_VAULT_SECRET'),
                         help="A vault secret.")
-    parser.add_argument('-m', action="store", dest="ui_mode",
+    parser.add_argument('-m',
+                        action="store",
+                        dest="ui_mode",
                         choices=['jinja', 'schema'],
                         required=False,
-                        default='jinja',
+                        default=os.environ.get('TD4A_UI_MODE', 'jinja'),
                         help="The mode for the UI. (default: jinja)")
+    parser.add_argument('--couch_url',
+                        action="store",
+                        dest="url",
+                        required=False,
+                        default=os.environ.get('COUCH_URL', False),
+                        help="CouchDB URL.")
+    parser.add_argument('--couch_username',
+                        action="store",
+                        dest="username",
+                        required=False,
+                        default=os.environ.get('COUCH_USERNAME', False),
+                        help="CouchDB username.")
+    parser.add_argument('--couch_password',
+                        action="store",
+                        dest="password",
+                        required=False,
+                        default=os.environ.get('COUCH_PASSWORD', False),
+                        help="CouchDB password.")
+    parser.add_argument('--log-level',
+                        action="store",
+                        dest="log_level",
+                        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+                        required=False,
+                        default=os.environ.get('LOG_LEVEL', 'INFO'),
+                        help="Log level for the application. (default: INFO)")
     args = parser.parse_args()
-    args.username = os.environ.get('COUCH_USERNAME', False)
-    args.password = os.environ.get('COUCH_PASSWORD', False)
-    args.url = os.environ.get('COUCH_URL', False)
     return args
 
 def main():
-    print("Loading...")
     app.args = parse_args()
+    log_level = getattr(logging, app.args.log_level)
+    app.logger = logging
+    app.logger.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=log_level)
+    app.logger.info('Starting up...')
+
     app.filters = filters_load(app.args.custom_filters)
     if app.args.inventory_source:
         app.inventory = inventory_load(inventory_sources=app.args.inventory_source,
-                                       vault_secret=app.args.vault_secret)
-    reactor_args = {}
-    app.debug = False
-    def wsgi():
-        resource = WSGIResource(reactor, reactor.getThreadPool(), app)
-        site = Site(resource)
-        reactor.listenTCP(5000, site)
-        reactor.run(**reactor_args)
-    if app.debug:
-        reactor_args['installSignalHandlers'] = 0
-        import werkzeug.serving
-        wsgi = werkzeug.serving.run_with_reloader(wsgi)
-    print("Ready.")
-    wsgi()
+                                        vault_secret=app.args.vault_secret)
+
+    resource = WSGIResource(reactor, reactor.getThreadPool(), app)
+    site = Site(resource)
+    reactor.listenTCP(5000, site)
+    reactor.run()
 
 if __name__ == '__main__':
     main()

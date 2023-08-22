@@ -76,17 +76,17 @@ def render(payload, filters, typ):
                 while after_jinja != raw_data:
                     raw_data = after_jinja
                     after_jinja = jinja_render(data=tvars,
-                                               template=raw_data,
-                                               filters=filters,
-                                               typ="p1")
+                                                template=raw_data,
+                                                filters=filters,
+                                                typ="p1")
                     yaml_ready = expose_dicts.sub("{\\1}", after_jinja)
                     yaml_ready = expose_lists1.sub("[\\1]", yaml_ready)
                     yaml_ready = dq_jinja.sub('"{{\\1}}"', yaml_ready)
                     tvars = loader.load(yaml_ready)
             result = jinja_render(data=tvars,
-                                  template=payload['p2'],
-                                  filters=filters,
-                                  typ="p2")
+                                    template=payload['p2'],
+                                    filters=filters,
+                                    typ="p2")
         return {"p3": result}
     except HandledException as error:
         return error.json()
@@ -96,9 +96,20 @@ def rest_render():
     """ render path
     """
     try:
-        print("Checking and parsing data...")
+        app.logger.info("Checking and parsing data...")
+        if app.args.log_level == 'DEBUG':
+            app.logger.debug('Input data:\n%s', request.json.get('p1'))
+            app.logger.debug('Template data:\n%s', request.json.get('p2'))
+
         response = render(payload=request.json, filters=app.filters, typ="page")
-        print("Done.")
+
+        if response.get('handled_error'):
+            raise HandledException({'json': response})
+
+        app.logger.info("Rendered response.")
+        if app.args.log_level == 'DEBUG':
+            app.logger.debug('Output data:\n%s', response.get('p3'))
         return jsonify(response)
     except HandledException as error:
+        app.logger.error(error.json())
         return jsonify(error.json())
