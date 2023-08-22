@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import logging
 import os
 from argparse import ArgumentParser, RawTextHelpFormatter
 
@@ -59,12 +60,23 @@ def parse_args():
                         required=False,
                         default=os.environ.get('COUCH_PASSWORD', False),
                         help="CouchDB password.")
+    parser.add_argument('--log-level',
+                        action="store",
+                        dest="log_level",
+                        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
+                        required=False,
+                        default=os.environ.get('LOG_LEVEL', 'INFO'),
+                        help="Log level for the application. (default: INFO)")
     args = parser.parse_args()
     return args
 
 def main():
-    print("Loading...")
     app.args = parse_args()
+    log_level = getattr(logging, app.args.log_level)
+    app.logger = logging
+    app.logger.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=log_level)
+    app.logger.info('Starting up...')
+
     app.filters = filters_load(app.args.custom_filters)
     if app.args.inventory_source:
         app.inventory = inventory_load(inventory_sources=app.args.inventory_source,

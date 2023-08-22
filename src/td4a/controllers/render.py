@@ -96,9 +96,12 @@ def rest_render():
     """ render path
     """
     try:
-        print("Checking and parsing data...")
+        app.logger.info("Checking and parsing data...")
+        if app.args.log_level == 'DEBUG':
+            app.logger.debug('Input data:\n%s', request.json['p1'])
+            app.logger.debug('Template data:\n%s', request.json['p2'])
         response = render(payload=request.json, filters=app.filters, typ="page")
-        print("Done.")
+        app.logger.info("Done.")
         return jsonify(response)
     except HandledException as error:
         return jsonify(error.json())
