@@ -1,20 +1,20 @@
 from netaddr import IPNetwork
 
+
 def convert(network, netmask):
-    entry = IPNetwork('%s/%s' % (network, netmask))
+    entry = IPNetwork(f"{network}/{netmask}")
     answer = {}
-    answer['slashbits'] = '/%s' % getattr(entry, 'prefixlen')
-    answer['bits'] = '%s' % getattr(entry, 'prefixlen')
-    answer['hostmask'] = str(entry.hostmask)
-    answer['netmask'] = str(entry.netmask)
-    answer['network'] = network
-    answer['net_netmask'] = '%s/%s' % (network, answer['netmask'])
-    answer['net_bits'] = '%s/%s' % (network, answer['bits'])
-    answer['net_hostmask'] = '%s/%s' % (network, answer['hostmask'])
+    answer["slashbits"] = f"/{getattr(entry, 'prefixlen')}"
+    answer["bits"] = getattr(entry, "prefixlen")
+    answer["hostmask"] = str(entry.hostmask)
+    answer["netmask"] = str(entry.netmask)
+    answer["network"] = network
+    answer["net_netmask"] = f"{network}/{answer['netmask']}"
+    answer["net_bits"] = f"{network}/{answer['bits']}"
+    answer["net_hostmask"] = f"{network}/{answer['hostmask']}"
     return answer
 
-class FilterModule(object):
+
+class FilterModule:  # pylint: disable=too-few-public-methods
     def filters(self):
-        return {
-            'convert': convert
-        }
+        return {"convert": convert}
