@@ -16,24 +16,50 @@ def parse_args():
     """
     parser = ArgumentParser(description='',
                             formatter_class=RawTextHelpFormatter)
-    parser.add_argument('-f', action="store", dest="custom_filters",
+    parser.add_argument('-f',
+                        action="store",
+                        dest="custom_filters",
                         required=False,
+                        default=os.environ.get('TD4A_CUSTOM_FILTERS'),
                         help="A folder containing custom filters.")
-    parser.add_argument('-i', action="append", dest="inventory_source",
+    parser.add_argument('-i',
+                        action="append",
+                        dest="inventory_source",
                         required=False,
+                        default=os.environ.get('TD4A_INVENTORY_SOURCE'),
                         help="A folder containing the inventory.")
-    parser.add_argument('-v', action="store", dest="vault_secret",
+    parser.add_argument('-v',
+                        action="store",
+                        dest="vault_secret",
                         required=False,
+                        default=os.environ.get('TD4A_VAULT_SECRET'),
                         help="A vault secret.")
-    parser.add_argument('-m', action="store", dest="ui_mode",
+    parser.add_argument('-m',
+                        action="store",
+                        dest="ui_mode",
                         choices=['jinja', 'schema'],
                         required=False,
-                        default='jinja',
+                        default=os.environ.get('TD4A_UI_MODE', 'jinja'),
                         help="The mode for the UI. (default: jinja)")
+    parser.add_argument('--couch_url',
+                        action="store",
+                        dest="url",
+                        required=False,
+                        default=os.environ.get('COUCH_URL', False),
+                        help="CouchDB URL.")
+    parser.add_argument('--couch_username',
+                        action="store",
+                        dest="username",
+                        required=False,
+                        default=os.environ.get('COUCH_USERNAME', False),
+                        help="CouchDB username.")
+    parser.add_argument('--couch_password',
+                        action="store",
+                        dest="password",
+                        required=False,
+                        default=os.environ.get('COUCH_PASSWORD', False),
+                        help="CouchDB password.")
     args = parser.parse_args()
-    args.username = os.environ.get('COUCH_USERNAME', False)
-    args.password = os.environ.get('COUCH_PASSWORD', False)
-    args.url = os.environ.get('COUCH_URL', False)
     return args
 
 def main():
