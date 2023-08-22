@@ -173,7 +173,10 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
         }
       })
       .catch(function(error) {
+        let err = 'Something unexpected happened. Is backend unavailable?'
+        console.log(err)
         console.log(error.data)
+        showToast(err, 6000, 'md-warn')
         $scope.config.p2.b1.show = true;
       }) //catch
     } //render
