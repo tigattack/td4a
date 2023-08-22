@@ -8,17 +8,16 @@ from flask import jsonify, request
 
 from td4a.models.td4ayaml import Td4aYaml
 
-api_inventory = Blueprint('api_inventory', __name__)
+api_inventory = Blueprint("api_inventory", __name__)
 
 
-@api_inventory.route('/inventory', methods=['GET'])
+@api_inventory.route("/inventory", methods=["GET"])
 def rest_inventory():
-    """ return inventory for host
-    """
+    """return inventory for host"""
     yaml = Td4aYaml()
-    inventory = app.inventory.get(request.args.get('host'), "")
+    inventory = app.inventory.get(request.args.get("host"), "")
     data = json.loads(json.dumps(inventory))
-    response_text = ''
+    response_text = ""
     for section in sorted(data.keys()):
         response_text += yaml.dump({section: data[section]})
     response = {"p1": response_text}

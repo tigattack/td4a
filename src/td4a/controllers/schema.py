@@ -7,16 +7,15 @@ from td4a.models.exception_handler import ExceptionHandler, HandledException
 from td4a.models.sort_commented_map import sort_commented_map
 from td4a.models.td4ayaml import Td4aYaml
 
-api_schema = Blueprint('api_schema', __name__)
+api_schema = Blueprint("api_schema", __name__)
 
 
 @ExceptionHandler
 def schema(data, typ):
-    """ Build schema from data
-    """
+    """Build schema from data"""
     _ = typ
     yaml = Td4aYaml()
-    obj_data = yaml.load(data['p1'])
+    obj_data = yaml.load(data["p1"])
     json_schema = genson.Schema()
     json_schema.add_object(obj_data)
     schema_dict = json_schema.to_dict()
@@ -26,10 +25,9 @@ def schema(data, typ):
     return sorted_schema_string
 
 
-@api_schema.route('/schema', methods=['POST'])
+@api_schema.route("/schema", methods=["POST"])
 def rest_schema():
-    """ Build a schema for data
-    """
+    """Build a schema for data"""
     try:
         payload = request.json
         response = schema(data=payload, typ="data")

@@ -3,12 +3,11 @@ from ruamel.yaml.compat import StringIO
 
 
 class Td4aYaml(YAML):
-    """ Build a string dumper for ruamel
-    """
+    """Build a string dumper for ruamel"""
+
     # pylint: disable=inconsistent-return-statements
     def dump(self, data, stream=None, **kw):
-        """ dump as string
-        """
+        """dump as string"""
         inefficient = False
         if stream is None:
             inefficient = True

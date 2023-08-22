@@ -9,7 +9,7 @@ from td4a.controllers.schema import api_schema
 from td4a.controllers.validate import api_validate
 
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__, static_url_path="")
 app.register_blueprint(api_config)
 app.register_blueprint(api_hosts)
 app.register_blueprint(api_inventory)
@@ -20,8 +20,7 @@ app.register_blueprint(api_schema)
 app.register_blueprint(api_validate)
 
 
-@app.route('/')
+@app.route("/")
 def root():
-    """ root path
-    """
-    return app.send_static_file('index.html')
+    """root path"""
+    return app.send_static_file("index.html")

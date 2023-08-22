@@ -2,13 +2,13 @@ from ruamel.yaml.comments import CommentedMap
 
 
 def sort_commented_map(commented_map):
-    """ Sort a ruamel commented map
+    """Sort a ruamel commented map
 
-        Args:
-            commented_map (CommentedMap): The cm to order
+    Args:
+        commented_map (CommentedMap): The cm to order
 
-        Returns:
-            CommentedMap: The sorted commented map
+    Returns:
+        CommentedMap: The sorted commented map
 
     """
     cmap = CommentedMap()
