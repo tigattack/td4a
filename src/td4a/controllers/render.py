@@ -98,10 +98,18 @@ def rest_render():
     try:
         app.logger.info("Checking and parsing data...")
         if app.args.log_level == 'DEBUG':
-            app.logger.debug('Input data:\n%s', request.json['p1'])
-            app.logger.debug('Template data:\n%s', request.json['p2'])
+            app.logger.debug('Input data:\n%s', request.json.get('p1'))
+            app.logger.debug('Template data:\n%s', request.json.get('p2'))
+
         response = render(payload=request.json, filters=app.filters, typ="page")
-        app.logger.info("Done.")
+
+        if response.get('handled_error'):
+            raise HandledException({'json': response})
+
+        app.logger.info("Rendered response.")
+        if app.args.log_level == 'DEBUG':
+            app.logger.debug('Output data:\n%s', response.get('p3'))
         return jsonify(response)
     except HandledException as error:
+        app.logger.error(error.json())
         return jsonify(error.json())
