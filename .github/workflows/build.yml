@@ -45,7 +45,7 @@ jobs:
 
       - name: Define image tags
         run: |
-          image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}""
+          image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
           if [ "${{ github.event_name }}" = "release" ]; then
             echo "TAGS=${image}:latest,${image}:${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
