@@ -1,8 +1,7 @@
-ARG PYTHON_VER='3.8'
+ARG PYTHON_VERSION='3.8'
 
-FROM python:${PYTHON_VER}-slim-bookworm
+FROM python:${PYTHON_VERSION}-slim-bookworm
 
-ARG PYTHON_VER
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
