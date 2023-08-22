@@ -4,3 +4,4 @@ node_modules
 venv
 dist
 *.egg-info
+__pycache__
