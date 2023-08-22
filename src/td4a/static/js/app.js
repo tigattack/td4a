@@ -14,6 +14,17 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
   $scope.config = {}
   $scope.demoShown = $cookies.get('demoShown') || false;
 
+  function showToast(message, hideDelay, highlightClass) {
+    var toast = $mdToast.simple()
+      .textContent(message)
+      .action('close')
+      .highlightAction(true)
+      .highlightClass(highlightClass)
+      .position('top right')
+      .hideDelay(hideDelay);
+    $mdToast.show(toast)
+  }
+  
   $scope.extraKeys = {
     Tab: function(cm) {
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
@@ -22,14 +33,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     "Cmd-S": function(cm) {
       localStorageService.set('panels', $scope.panels)
       localStorageService.set('config', $scope.config)
-      var toast = $mdToast.simple()
-        .textContent("Saved")
-        .action('close')
-        .highlightAction(true)
-        .highlightClass('md-primary')
-        .position('top right')
-        .hideDelay('2000');
-      $mdToast.show(toast)
+      showToast('Saved', 3000, 'md-primary')
     },
     "Cmd-R": function(cm) {
       $scope.p2_b1_click()
@@ -99,14 +103,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
     } else {
         var errorMessage = `${error.title} ${error.details}\n`;
     }
-    var toast = $mdToast.simple()
-      .textContent(errorMessage)
-      .action('close')
-      .highlightAction(true)
-      .highlightClass('md-warn')
-      .position('top right')
-      .hideDelay('60000');
-    $mdToast.show(toast)
+    showToast(errorMessage, 3000, 'md-warn')
   };
 
   $scope.link = function() {
