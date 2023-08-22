@@ -76,17 +76,17 @@ def render(payload, filters, typ):
                 while after_jinja != raw_data:
                     raw_data = after_jinja
                     after_jinja = jinja_render(data=tvars,
-                                               template=raw_data,
-                                               filters=filters,
-                                               typ="p1")
+                                                template=raw_data,
+                                                filters=filters,
+                                                typ="p1")
                     yaml_ready = expose_dicts.sub("{\\1}", after_jinja)
                     yaml_ready = expose_lists1.sub("[\\1]", yaml_ready)
                     yaml_ready = dq_jinja.sub('"{{\\1}}"', yaml_ready)
                     tvars = loader.load(yaml_ready)
             result = jinja_render(data=tvars,
-                                  template=payload['p2'],
-                                  filters=filters,
-                                  typ="p2")
+                                    template=payload['p2'],
+                                    filters=filters,
+                                    typ="p2")
         return {"p3": result}
     except HandledException as error:
         return error.json()
