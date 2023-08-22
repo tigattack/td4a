@@ -8,8 +8,8 @@ setup(
     author='Bradley A. Thornton (fork by tigattack)',
     license='MIT',
     include_package_data=True,
-    packages=['td4a'],
-    scripts=['td4a-server'],
+    packages=['src/td4a'],
+    scripts=['src/td4a-server'],
     install_requires=[
         'ansible==2.9.12',
         'Flask==1.1.2',

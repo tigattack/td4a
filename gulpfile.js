@@ -6,8 +6,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     clean = require('gulp-clean');
 
-var jsDest = 'td4a/static/jsTemp';
-var cssDest = 'td4a/static/css';
+var jsDest = 'src/td4a/static/jsTemp';
+var cssDest = 'src/td4a/static/css';
 
 gulp.task('default', function() {
 });
@@ -86,21 +86,21 @@ gulp.task('ng-split', function(done) {
 
 gulp.task('scripts', function(done) {
   gulp.src([
-                    'td4a/static/jsTemp/angular.js',
-                    'td4a/static/jsTemp/codemirror.js',
-                    'td4a/static/jsTemp/*.js'
+                    'src/td4a/static/jsTemp/angular.js',
+                    'src/td4a/static/jsTemp/codemirror.js',
+                    'src/td4a/static/jsTemp/*.js'
                   ])
     .pipe(concat('main.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('main.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('td4a/static/js'))
+    .pipe(gulp.dest('src/td4a/static/js'))
     .pipe(notify({ message: 'Scripts task complete' }));
   done();
 });
 
 gulp.task('clean', function (done) {
-  gulp.src(['td4a/static/jsTemp',
+  gulp.src(['src/td4a/static/jsTemp',
                      'dist'
                     ], {read: false})
         .pipe(clean({force: true}));

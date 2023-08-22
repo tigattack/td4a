@@ -1,12 +1,15 @@
 #! /usr/bin/env python
-from td4a import app
-from td4a.models.filters import filters_load
-from td4a.models.inventory import inventory_load
-from argparse import ArgumentParser, RawTextHelpFormatter
 import os
+from argparse import ArgumentParser, RawTextHelpFormatter
+
 from twisted.internet import reactor
 from twisted.web.server import Site
 from twisted.web.wsgi import WSGIResource
+
+from td4a import app
+from td4a.models.filters import filters_load
+from td4a.models.inventory import inventory_load
+
 
 def parse_args():
     """ parse the cli args and add environ
