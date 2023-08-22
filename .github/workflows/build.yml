@@ -10,10 +10,6 @@ on:
         description: 'Push image [true|false]'
         required: false
         default: 'false'
-      tag:
-        description: 'Image tag'
-        required: false
-        default: 'latest'
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -39,27 +35,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata for Docker
+        id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Define image tags
-        run: |
-          image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
-          if [ "${{ github.event_name }}" = "release" ]; then
-            echo "TAGS=${image}:latest,${image}:${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "TAGS=${image}:${{ github.event.inputs.tag }}" >> $GITHUB_ENV
-          elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "TAGS=${image}:${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-          fi
 
       - name: Build, maybe push image
         uses: docker/build-push-action@v4
         with:
           push: ${{ github.event.inputs.push != 'false' }}
           platforms: linux/amd64,linux/arm64
-          tags: ${{ env.TAGS }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
