@@ -68,20 +68,12 @@ def main():
     app.filters = filters_load(app.args.custom_filters)
     if app.args.inventory_source:
         app.inventory = inventory_load(inventory_sources=app.args.inventory_source,
-                                       vault_secret=app.args.vault_secret)
-    reactor_args = {}
-    app.debug = False
-    def wsgi():
-        resource = WSGIResource(reactor, reactor.getThreadPool(), app)
-        site = Site(resource)
-        reactor.listenTCP(5000, site)
-        reactor.run(**reactor_args)
-    if app.debug:
-        reactor_args['installSignalHandlers'] = 0
-        import werkzeug.serving
-        wsgi = werkzeug.serving.run_with_reloader(wsgi)
-    print("Ready.")
-    wsgi()
+                                        vault_secret=app.args.vault_secret)
+
+    resource = WSGIResource(reactor, reactor.getThreadPool(), app)
+    site = Site(resource)
+    reactor.listenTCP(5000, site)
+    reactor.run()
 
 if __name__ == '__main__':
     main()
