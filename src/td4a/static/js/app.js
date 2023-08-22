@@ -34,7 +34,7 @@ app.controller('main', function($scope, $http, $window, $mdToast, $timeout, $rou
       localStorageService.set('panels', $scope.panels)
       showToast('Saved', 3000, 'md-primary')
     },
-    "Cmd-R": function(cm) {
+    "Cmd-E": function(cm) {
       $scope.p2_b1_click()
     },
     "Cmd-B": function(cm) {
