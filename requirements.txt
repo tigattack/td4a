@@ -6,5 +6,5 @@ jinja2==3.1.2
 jsonschema==4.19.1
 netaddr==0.9.0
 requests==2.31.0
-ruamel.yaml==0.17.32
+ruamel.yaml==0.17.35
 Twisted==23.8.0
