@@ -10,6 +10,12 @@ WORKDIR /app
 COPY src/ src/
 COPY requirements.txt setup.py ./
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt update &&\
+    apt install -y gcc &&\
+    pip install --no-cache-dir -r requirements.txt &&\
+    apt purge -y gcc &&\
+    apt autoremove -y &&\
+    apt clean &&\
+    rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT [ "src/td4a-server" ]
