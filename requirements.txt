@@ -1,4 +1,4 @@
-ansible-core==2.15.4
+ansible-core==2.16.0
 Flask==3.0.0
 genson==1.2.2
 itsdangerous==2.1.2
