@@ -1,5 +1,5 @@
 # renovate: datasource=docker depName=python versioning=docker
-ARG PYTHON_VERSION=3.13-slim-bookworm
+ARG PYTHON_VERSION=3.14-slim-bookworm
 
 FROM python:${PYTHON_VERSION}
 
